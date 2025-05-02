@@ -97,7 +97,6 @@ This is a lightweight imitation learning demonstration. You can:
 ---
 
 ## 👤 Author
-
-**Daiki Matsuba**  
+ 
 - GitHub: [CreationTheSustainableWorld](https://github.com/CreationTheSustainableWorld)  
 - Portfolio: [Google Sites](https://sites.google.com/view/job-application-portfolio)
