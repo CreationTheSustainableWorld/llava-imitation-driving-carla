@@ -1,102 +1,87 @@
-# 🚗 LLaVA-based Autonomous Driving Agent in CARLA
+# 🚗 LLaVA-Based Vision-to-Action Imitation Model for Autonomous Driving
 
-This project demonstrates a simple imitation learning pipeline using [LLaVA 1.5](https://github.com/haotian-liu/LLaVA) (a vision-language model) combined with a custom-trained MLP to control a vehicle in the CARLA simulator.
-
-![HUD Screenshot](images/hud_screenshot.png)
-
----
-
-## 🎯 Overview
-
-- Vision model: **llava-hf/llava-1.5-7b-hf**  
-- Action model: **Custom MLP (linear layers)**  
-- Input: Image + Prompt  
-- Output: Continuous actions: **steer, throttle, brake**
-
-The system observes RGB camera images in a simulated environment and makes real-time driving decisions based on visual and contextual information.
+This project demonstrates how to repurpose the [LLaVA-1.5-7B](https://huggingface.co/llava-hf/llava-1.5-7b-hf) multimodal model for **real-time driving control** using **CARLA simulator**.  
+By extracting intermediate visual features from LLaVA and training a lightweight MLP, we achieve image → action mapping for autonomous vehicles.
 
 ---
 
-## 🧠 Model Architecture
+## 📌 Overview
 
-```text
-Camera Image + Prompt
-        ↓
-    LLaVA (frozen)
-        ↓
-Last hidden state [CLS] (dim=4096)
-        ↓
-   MLP Head (4096 → 512 → 3)
-        ↓
-[Steer, Throttle, Brake]
+```
+Image (RGB) + Prompt
+     ↓
+[LLaVA: vision encoder + language decoder]
+     ↓ (CLS token)
+Intermediate Visual Feature
+     ↓
+[MLP Head]
+     ↓
+Action: steer, throttle, brake
 ```
 
 ---
 
-## 🖼️ Demo
+## ✅ Key Features
 
-![Frame Sample](images/example_frame.png)
+- 🔄 **Modular design**: Feature extraction, training, and inference are fully decoupled.
+- 🎯 **Practical structure**: End-to-end flow from CARLA simulation → data collection → training → real-time control.
+- 🧠 **Creative adaptation**: LLaVA is used not for text generation but for decision-making features.
+- 🧪 **Tested in CARLA**: Live vehicle control via real-time inference.
 
 ---
 
-## 🛠️ Requirements
+## 🛠️ Folder Structure
 
-```bash
-pip install torch transformers carla pygame Pillow numpy
 ```
-
----
-
-## 🚀 How to Run
-
-1. Launch CARLA simulator (`CarlaUE4.exe`)
-2. Then run:
-
-```bash
-python run_carla_imitation_agent.py
-```
-
-> You should see the vehicle driving based on visual input and the HUD displaying its control states.
-
----
-
-## 📁 Project Structure
-
-```text
 .
-├── run_carla_imitation_agent.py       # Main execution script
-├── model/
-│   ├── mlp_action_head.pth            # Trained MLP
-│   └── llava_config/                  # (optional) LLaVA model weights
-├── images/
-│   ├── hud_screenshot.png             # HUD screenshot
-│   └── example_frame.png              # Camera image sample
-├── data/
-│   ├── actions.json                   # Saved control logs
-│   └── log_video.mp4                  # (optional) driving video
+├── data_collection/              # CARLA agent script for image-action collection
+├── features_extraction/         # Extract LLaVA intermediate features (.pt)
+├── mlp_training/                # Train MLP from features to actions
+├── real_time_control/           # Inference script for CARLA real-time driving
+├── trained_models/              # Saved MLP model
+├── _out/                        # Collected images and actions
 └── README.md
 ```
 
 ---
 
-## 🤖 Training Summary
+## 📂 Components
 
-- Training data was collected from a behavior agent in CARLA
-- Each image was paired with its corresponding `[steer, throttle, brake]` vector
-- LLaVA was frozen, and only the MLP was trained
+| Folder | Description |
+|--------|-------------|
+| `data_collection/` | Records driving images + actions from CARLA |
+| `features_extraction/` | Uses LLaVA to extract CLS token from each image |
+| `mlp_training/` | Trains MLP (ActionHead) on features-action pairs |
+| `real_time_control/` | Loads LLaVA + MLP and controls CARLA vehicle in real time |
 
 ---
 
-## 📌 Note
+## 📈 Improvements & Extensions
 
-This is a lightweight imitation learning demonstration. You can:
-- Improve precision by fine-tuning LLaVA
-- Add multi-camera views
-- Incorporate memory or language-based reasoning
+| Challenge | Future Direction |
+|----------|------------------|
+| Only MLP | Use Transformer or CNN-based ActionHead |
+| No temporal context | Add LSTM/GRU for time-series modeling |
+| No reward usage | Apply RL fine-tuning (e.g., PPO, TD3+BC) |
+| Limited visualization | Add training/inference visualization dashboards |
+
+---
+
+## 📽️ Demo
+
+_🧩 Coming Soon: Demo video of agent driving in CARLA._
+
+---
+
+## 📚 References
+
+- [LLaVA Model (Hugging Face)](https://huggingface.co/llava-hf/llava-1.5-7b-hf)
+- [CARLA Simulator](https://carla.org/)
+- [TD3+BC: Offline Reinforcement Learning](https://arxiv.org/abs/2106.06860)
 
 ---
 
 ## 👤 Author
- 
-- GitHub: [CreationTheSustainableWorld](https://github.com/CreationTheSustainableWorld)  
-- Portfolio: [Google Sites](https://sites.google.com/view/job-application-portfolio)
+
+松場 大樹  
+GitHub: [CreationTheSustainableWorld](https://github.com/CreationTheSustainableWorld)
