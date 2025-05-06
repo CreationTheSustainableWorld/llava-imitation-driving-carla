@@ -83,5 +83,4 @@ _🧩 Coming Soon: Demo video of agent driving in CARLA._
 
 ## 👤 Author
 
-松場 大樹  
 GitHub: [CreationTheSustainableWorld](https://github.com/CreationTheSustainableWorld)
